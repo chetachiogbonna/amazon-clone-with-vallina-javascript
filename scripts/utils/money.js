@@ -1,0 +1,1 @@
+export const formatCurrency = productId => (Math.round(productId) / 100).toFixed(2);
