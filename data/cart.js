@@ -4,7 +4,7 @@ const saveToStorage = () => {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-export const addToCart = (productId) => {
+export const addToCart = (productId, quantity) => {
   let matchingItem;
 
   cart.forEach((cartItem) => {
@@ -14,14 +14,24 @@ export const addToCart = (productId) => {
   });
 
   if (matchingItem) {
-    matchingItem.quantity += 1;
+    matchingItem.quantity += quantity;
   } else {
     cart.push({
       productId,
-      quantity: 1,
+      quantity,
       deliveryOptionId: '1'
     })
   }
 
   saveToStorage();
+};
+
+export const countCartQuantity = () => {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  return cartQuantity;
 };

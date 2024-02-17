@@ -1,12 +1,12 @@
 import { products } from "../data/products.js";
-import { addToCart } from "../data/cart.js";
+import { addToCart, countCartQuantity } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
 
 let productsHTML = '';
 
 products.forEach((product) => {
   productsHTML += `
-    <div class="product-container">
+    <div class="product-container js-product-container-${product.id}">
       <div class="product-image-container">
         <img class="product-image"
           src="${product.image}">
@@ -29,7 +29,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-product-quantity">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -58,12 +58,29 @@ products.forEach((product) => {
   `;
 });
 
+const cartQuantity = document.querySelector(".js-cart-quantity");
+cartQuantity.textContent = countCartQuantity();
+
 document.querySelector(".js-products-grid").innerHTML= productsHTML;
 
 document.querySelectorAll(".js-add-to-cart-button")
-  .forEach((addButon) => {
+  .forEach((addButon, index) => {
     addButon.addEventListener('click', () => {
+      // getting the value from the select input as the quantity of the product
+      const selectElem = document.querySelectorAll(".js-product-quantity")[index];
+      const quantity = Number(selectElem.value);
+
       const { productId } = addButon.dataset;
-      addToCart(productId);
+      // adding product to the cart ```check the cart.js file in data/cart.js```
+      addToCart(productId, quantity);
+
+      cartQuantity.textContent = countCartQuantity();
+
+      // getting the specific product container to add a className ```check styles/pages/amazon.css line 158```
+      const productContainer = document.querySelector(`.js-product-container-${productId}`);
+      productContainer.classList.add("added-product");
+      setTimeout(() => {
+        productContainer.classList.remove("added-product");
+      }, 1000);
     });
   });

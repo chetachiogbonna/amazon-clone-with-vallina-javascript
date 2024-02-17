@@ -1,4 +1,4 @@
-import { cart } from "../../data/cart.js";
+import { cart, countCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 
@@ -94,3 +94,6 @@ cart.forEach((cartItem) => {
 });
 
 document.querySelector(".js-order-summary").innerHTML = orderSummaryHTML;
+
+const cartQuantity = document.querySelector(".js-return-to-home-link");
+cartQuantity.textContent = countCartQuantity() > 1 ? `${countCartQuantity()} items` : `${countCartQuantity()} item`;
